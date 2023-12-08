@@ -21,6 +21,7 @@ interface Node {
     column: number;
     index: number;
   };
+  text:string;
 }
 
 /**
@@ -29,8 +30,8 @@ interface Node {
 export function getFunctionNodeJs(
   index: number,
   code: string
-): Node | undefined {
-  let node;
+): Node[]  {
+  let nodeList: Node[] = [];
 
   const ast = parse(code);
 
@@ -39,32 +40,40 @@ export function getFunctionNodeJs(
     FunctionExpression: hanldeFunctionExpression,
     ArrowFunctionExpression: hanldeFunctionExpression,
     ClassMethod: (path) => {
+      console.log("ClassMethod");
       const nodeHandler = createNodeClassMethodHandler(path, index);
       if (nodeHandler?.isContain()) {
-        node = nodeHandler?.handle();
+        console.log("ClassMethod isContain");
+        nodeList.push(nodeHandler?.handle());
       }
     },
     ObjectMethod: (path) => {
+      console.log("ObjectMethod");
       const nodeHandler = createNodeObjectMethodHandler(path, index);
       if (nodeHandler?.isContain()) {
-        node = nodeHandler?.handle();
+        console.log("ObjectMethod isContain");
+        nodeList.push(nodeHandler?.handle());
       }
     },
   });
 
   function handleFunctionDeclaration(path: NodePath<FunctionDeclaration>) {
+    console.log("handleFunctionDeclaration");
     const nodeHandler = createNodeFunctionDeclarationHandler(path, index);
     if (nodeHandler?.isContain()) {
-      node = nodeHandler?.handle();
+      console.log("handleFunctionDeclaration isContain");
+      nodeList.push(nodeHandler?.handle());
     }
   }
 
   function hanldeFunctionExpression(path) {
+    console.log("hanldeFunctionExpression");
     const nodeHandler = createNodeFunctionExpressionHandler(path, index);
     if (nodeHandler?.isContain()) {
-      node = nodeHandler?.handle();
+      console.log("hanldeFunctionExpression isContain");
+      nodeList.push(nodeHandler?.handle());
     }
   }
 
-  return node;
+  return nodeList;
 }

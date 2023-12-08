@@ -33,15 +33,17 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log(offset, languageType);
 			// 获取当前文件内容
 			const text = editor.document.getText();
-			console.log(text);
+			// console.log(text);
 
 			// text to ast
-			getFunctionNode(offset, text, languageType);
-		
-
-			const newText = `@log-ignore`;
-
-			replaceText(new vscode.Range(curPos, curPos), newText);
+			const list  = getFunctionNode(offset, text, languageType);
+			// 获取要添加日志的代码范围和添加了日志的代码
+			console.log(list);
+			list.forEach((item) => {
+				const {start, end, text} = item;
+				const range = new vscode.Range(new vscode.Position(start.line-1,start.column), new vscode.Position(end.line-1,end.column));
+				replaceText(range, text);
+			});
 		}
 
 

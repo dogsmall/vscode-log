@@ -1,11 +1,26 @@
 import { parse, compileScript } from "@vue/compiler-sfc";
 import { getFunctionNodeJs } from "./handleJs";
-export function getFunctionNodeVue(index: number, code: string) {
+
+interface ResuleNode {
+  name: string;
+  start: {
+    line: number;
+    column: number;
+  };
+  end: {
+    line: number;
+    column: number;
+  };
+  text:string;
+}
+
+
+export function getFunctionNodeVue(index: number, code: string): ResuleNode[] {
   const { descriptor } = parse(code);
 
   if (!descriptor.scriptSetup && !descriptor.script) {
     // no write scriptSetup and  no write script
-    return null;
+    return [];
   }
 
   const sfcNode = descriptor.scriptSetup
@@ -16,25 +31,28 @@ export function getFunctionNodeVue(index: number, code: string) {
     id: "delete-function",
   });
 
-  const functionNode = getFunctionNodeJs(
+  const nodeList = getFunctionNodeJs(
     index - loc.start.offset,
     loc.source
   );
 
-  if (!functionNode) {
+  if (nodeList.length===0) {
     // not found node by index
-    return;
+    return [];
   }
 
-  return {
-    name: functionNode.name,
-    start: {
-      line: sfcNode.start.line + (functionNode.start.line - 1),
-      column: functionNode.start.column,
-    },
-    end: {
-      line: sfcNode.start.line + (functionNode.end.line - 1),
-      column: functionNode.end.column,
-    },
-  };
+  return nodeList.map((node) => {
+      return {
+        name: node.name,
+        start: {
+          line: sfcNode.start.line + (node.start.line - 1),
+          column: node.start.column,
+        },
+        end: {
+          line: sfcNode.start.line + (node.end.line - 1),
+          column: node.end.column,
+        },
+        text: node.text,
+      };
+    });
 }

@@ -10,6 +10,7 @@ interface Node {
     column: number;
     index: number;
   };
+  text:string;
 }
 
 interface IBaseNodeHandler {

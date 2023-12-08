@@ -12,6 +12,7 @@ export class ExportDeclarationHandler extends BaseNodeHandler {
         : (this.path as any).parentPath.node.declaration.id.name,
       start: { ...(this.path as any).parentPath.node.loc.start },
       end: { ...(this.path as any).parentPath.node.loc.end },
+      text:""
     };
   }
 }

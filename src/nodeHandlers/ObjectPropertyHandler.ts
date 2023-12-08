@@ -8,6 +8,7 @@ export class ObjectPropertyHandler extends BaseNodeHandler {
       name: this.path.parentPath.node.key.name,
       start: { ...this.path.parentPath.node.loc.start },
       end: { ...this.path.parentPath.node.loc.end },
+      text:""
     };
   }
 }

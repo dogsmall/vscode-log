@@ -4,10 +4,13 @@ export class FunctionExpressionHandler extends BaseNodeHandler {
     return this._isContain(this.path.parentPath.parentPath.node, this.index);
   }
   handle() {
+    console.log(this.path);
+
     return {
       name: this.path.parentPath.node.id.name,
       start: { ...this.path.parentPath.parentPath.node.loc.start },
       end: { ...this.path.parentPath.parentPath.node.loc.end },
+      text:""
     };
   }
 }

@@ -9,6 +9,7 @@ export class ExportDefaultDeclarationHandler extends BaseNodeHandler {
       name: "",
       start: { ...this.path.parentPath.node.loc.start },
       end: { ...this.path.parentPath.node.loc.end },
+      text:""
     };
   }
 }

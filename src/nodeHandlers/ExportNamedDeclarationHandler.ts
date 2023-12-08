@@ -16,6 +16,7 @@ export class ExportNamedDeclarationHandler extends BaseNodeHandler {
       name: getName(),
       start: { ...this.path.parentPath.parentPath.parentPath.node.loc.start },
       end: { ...this.path.parentPath.parentPath.parentPath.node.loc.end },
+      text:""
     };
   }
 }

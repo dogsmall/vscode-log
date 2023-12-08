@@ -5,10 +5,12 @@ export class FunctionDeclarationHandler extends BaseNodeHandler {
   }
 
   handle() {
+    console.log(this.path);
     return {
       name: this.path.node.id.loc.identifierName,
       start: { ...this.path.node.loc.start },
       end: { ...this.path.node.loc.end },
+      text:""
     };
   }
 }
