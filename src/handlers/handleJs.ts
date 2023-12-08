@@ -6,7 +6,7 @@ import {
   createNodeFunctionDeclarationHandler,
   createNodeFunctionExpressionHandler,
   createNodeObjectMethodHandler,
-  createNodeClassMethodHandler
+  createNodeClassMethodHandler,
 } from "../nodeHandlers";
 
 interface Node {
@@ -21,7 +21,7 @@ interface Node {
     column: number;
     index: number;
   };
-  text:string;
+  text: string;
 }
 
 /**
@@ -30,8 +30,8 @@ interface Node {
 export function getFunctionNodeJs(
   index: number,
   code: string
-): Node[]  {
-  let nodeList: Node[] = [];
+): Node | undefined {
+  let node;
 
   const ast = parse(code);
 
@@ -44,7 +44,7 @@ export function getFunctionNodeJs(
       const nodeHandler = createNodeClassMethodHandler(path, index);
       if (nodeHandler?.isContain()) {
         console.log("ClassMethod isContain");
-        nodeList.push(nodeHandler?.handle());
+        node = nodeHandler?.handle();
       }
     },
     ObjectMethod: (path) => {
@@ -52,7 +52,7 @@ export function getFunctionNodeJs(
       const nodeHandler = createNodeObjectMethodHandler(path, index);
       if (nodeHandler?.isContain()) {
         console.log("ObjectMethod isContain");
-        nodeList.push(nodeHandler?.handle());
+        node = nodeHandler?.handle();
       }
     },
   });
@@ -62,7 +62,7 @@ export function getFunctionNodeJs(
     const nodeHandler = createNodeFunctionDeclarationHandler(path, index);
     if (nodeHandler?.isContain()) {
       console.log("handleFunctionDeclaration isContain");
-      nodeList.push(nodeHandler?.handle());
+      node = nodeHandler?.handle();
     }
   }
 
@@ -71,9 +71,9 @@ export function getFunctionNodeJs(
     const nodeHandler = createNodeFunctionExpressionHandler(path, index);
     if (nodeHandler?.isContain()) {
       console.log("hanldeFunctionExpression isContain");
-      nodeList.push(nodeHandler?.handle());
+      node = nodeHandler?.handle();
     }
   }
 
-  return nodeList;
+  return node;
 }
