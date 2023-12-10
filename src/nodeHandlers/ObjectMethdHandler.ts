@@ -12,38 +12,18 @@ export class ObjectMethodHandler extends BaseNodeHandler {
 
     let funcName = this.path.node.key.name;
 
-    let paramsArr = this.path.node.params
-      .map((param) => {
-        if (param.name) {
-          return param.name;
-        }
-        if (!param.name && param.left) {
-          return param.left.name;
-        }
-        if (!param.name && param.properties) {
-          return param.properties.map((node) => node.key.name);
-        }
-        if (!param.name && param.elements) {
-          return param.elements.map((node) => node.name);
-        }
-        if (param.type === "RestElement") {
-          return param.argument.name;
-        }
-      })
-      .flat();
-    let paramsStr = paramsArr.join(", ");
 
+    const paramsTemp = this._paramsToTemp(this.path.node.params);
     let temp:ExpressionStatement ;
 
-    if (paramsStr) {
-      temp = template(`console.info('${funcName}(${paramsStr})',${paramsStr})`)();
+    if (paramsTemp) {
+      temp = template(`console.info('${funcName}(${paramsTemp})',${paramsTemp})`)();
     } else {
       temp = template(`console.info('${funcName}')`)();
     }
     // console.log(temp);
     this.path.node.body.body.unshift(temp);
     const text = generate(this.path.node).code;
-    console.log(text);
     return {
       name: this.path.node.key.name,
       start: { ...this.path.node.loc.start },

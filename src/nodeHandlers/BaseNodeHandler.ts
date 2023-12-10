@@ -1,3 +1,6 @@
+import template from "@babel/template";
+import generate from "@babel/generator";
+
 interface Node {
   name: string;
   start: {
@@ -10,7 +13,7 @@ interface Node {
     column: number;
     index: number;
   };
-  text:string;
+  text: string;
 }
 
 interface IBaseNodeHandler {
@@ -37,5 +40,41 @@ export class BaseNodeHandler implements IBaseNodeHandler {
 
   handle(): Node | undefined {
     throw new Error("must write handle");
+  }
+  _template(codeString: String) {
+    return template(codeString)();
+  }
+  _generate(node) {
+    return generate(node).code;
+  }
+  _paramsToTemp(params:Array<any>):string {
+    return params
+    .map((param) => {
+      if (param.name) {
+        return param.name;
+      }
+      if (!param.name && param.left) {
+        return param.left.name;
+      }
+      if (!param.name && param.properties) {
+        return param.properties.map((node) => node.key.name);
+      }
+      if (!param.name && param.elements) {
+        return param.elements.map((node) => node.name);
+      }
+      if (param.type === "RestElement") {
+        return param.argument.name;
+      }
+    })
+    .flat().join(", ");
+  }
+  _tempToAst<T>(funcName:String,paramsTemp: String):T {
+    let temp: T;
+    if (paramsTemp) {
+      temp = this._template(`console.info('${funcName}(${paramsTemp})',${paramsTemp})`);
+    } else {
+      temp = this._template(`console.info('${funcName}')`);
+    }
+    return temp;
   }
 }

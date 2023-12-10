@@ -5,6 +5,7 @@ export class ExportDefaultDeclarationHandler extends BaseNodeHandler {
   }
 
   handle() {
+    console.log("ExportDefaultDeclarationHandler", this.path);
     return {
       name: "",
       start: { ...this.path.parentPath.node.loc.start },
