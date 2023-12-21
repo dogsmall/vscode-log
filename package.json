@@ -3,7 +3,7 @@
   "displayName": "add-log",
   "description": "自动添加日志",
   "version": "0.0.1",
-  "publisher": "guoshiwei3609",
+  "publisher": "guoshiwei",
   "author": "郭世伟 <guoshiwei3609@gmail.com>",
   "engines": {
     "vscode": "^1.84.0"
