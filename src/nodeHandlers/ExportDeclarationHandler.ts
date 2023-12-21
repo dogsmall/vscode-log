@@ -19,8 +19,8 @@ export class ExportDeclarationHandler extends BaseNodeHandler {
     const text = this._generate(this.path.node);
     return {
       name: funcName,
-      start: { ...(this.path as any).parentPath.node.loc.start },
-      end: { ...(this.path as any).parentPath.node.loc.end },
+      start: { ...(this.path as any).node.loc.start },
+      end: { ...(this.path as any).node.loc.end },
       text:text
     };
   }

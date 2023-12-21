@@ -8,22 +8,16 @@ export class ObjectMethodHandler extends BaseNodeHandler {
     return this._isContain(this.path.node, this.index);
   }
   handle() {
-    console.log(this.path);
+    console.log("ObjectMethdHandler",this.path);
 
-    let funcName = this.path.node.key.name;
-
-
+    const funcName = this.path.node.key.name;
     const paramsTemp = this._paramsToTemp(this.path.node.params);
-    let temp:ExpressionStatement ;
-
-    if (paramsTemp) {
-      temp = template(`console.info('${funcName}(${paramsTemp})',${paramsTemp})`)();
-    } else {
-      temp = template(`console.info('${funcName}')`)();
+    const temp = this._tempToAst(funcName,paramsTemp);
+    if(this.path.node.body.type==='StringLiteral'){
+      return;
     }
-    // console.log(temp);
     this.path.node.body.body.unshift(temp);
-    const text = generate(this.path.node).code;
+    const text = this._generate(this.path.node);
     return {
       name: this.path.node.key.name,
       start: { ...this.path.node.loc.start },

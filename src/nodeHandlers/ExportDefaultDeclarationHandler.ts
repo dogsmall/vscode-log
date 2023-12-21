@@ -6,11 +6,24 @@ export class ExportDefaultDeclarationHandler extends BaseNodeHandler {
 
   handle() {
     console.log("ExportDefaultDeclarationHandler", this.path);
+    if(this.path.node.body.type==='StringLiteral'){
+      console.log("isStringLiteral",this.path.node.body.value);
+      return;
+    }
+    const funcName = "export default";
+    const paramsTemp = this._paramsToTemp(this.path.node.params);
+    let temp = this._tempToAst(funcName, paramsTemp);
+    if(this.path.node.body.type==='StringLiteral'){
+
+      return;
+    }
+    this.path.node.body.body.unshift(temp);
+    const text = this._generate(this.path.node);
     return {
-      name: "",
-      start: { ...this.path.parentPath.node.loc.start },
-      end: { ...this.path.parentPath.node.loc.end },
-      text:""
+      name: funcName,
+      start: { ...this.path.node.loc.start },
+      end: { ...this.path.node.loc.end },
+      text:text
     };
   }
 }

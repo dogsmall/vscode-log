@@ -4,13 +4,19 @@ export class ObjectPropertyHandler extends BaseNodeHandler {
     return this._isContain(this.path.parentPath.node, this.index);
   }
   handle() {
-    console.log("ObjectPropertyHandler",this.path);
-
+    const funcName = this.path.parentPath.node.key.name;
+    const paramsTemp = this._paramsToTemp(this.path.node.params);
+    let temp = this._tempToAst(funcName,paramsTemp);
+    if(this.path.node.body.type==='StringLiteral'){
+      return;
+    }
+    this.path.node.body.body.unshift(temp);
+    const text = this._generate(this.path.node);
     return {
-      name: this.path.parentPath.node.key.name,
-      start: { ...this.path.parentPath.node.loc.start },
-      end: { ...this.path.parentPath.node.loc.end },
-      text:""
+      name: funcName,
+      start: { ...this.path.node.loc.start },
+      end: { ...this.path.node.loc.end },
+      text:text
     };
   }
 }

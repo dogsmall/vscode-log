@@ -1,37 +1,36 @@
 import { describe, it, expect } from "vitest";
 import { getFunctionNodeVue } from "../handlers/handleVue";
 
-describe.skip("handle vue", () => {
-  it("setup", () => {
-    const code = `<template>
-<div>vue</div>
-</template>
+describe.only("handle vue", () => {
+//   it("setup", () => {
+//     const code = `<template>
+// <div>vue</div>
+// </template>
 
-<script setup>
-function getName() {
-    console.log("name");
-    function setName(){console.log("setName")}
-}
-</script>
+// <script setup>
+// function getName() {
+//     console.log("name");
+//     function setName(){console.log("setName")}
+// }
+// </script>
 
-<style></style>
-	`;
+// <style></style>
+// 	`;
 
-    const index = 54;
-    const node = getFunctionNodeVue(index, code);
-
-    expect(node).toEqual({
-      name: "getName",
-      start: {
-        line: 6,
-        column: 0,
-      },
-      end: {
-        line: 9,
-        column: 1,
-      },
-    });
-  });
+//     const index = 54;
+//     const node = getFunctionNodeVue(index, code);
+//     expect(node).toEqual({
+//       name: "getName",
+//       start: {
+//         line: 6,
+//         column: 0,
+//       },
+//       end: {
+//         line: 9,
+//         column: 1,
+//       },
+//     });
+//   });
 
   it("script ", () => {
     const code = `
@@ -64,7 +63,7 @@ export default defineComponent({
 
     const index = 50 + 87;
     const node = getFunctionNodeVue(index, code);
-
+    console.log(node);
     expect(node).toEqual({
       name: "setName",
       start: {
@@ -78,17 +77,17 @@ export default defineComponent({
     });
   });
 
-  it("empty that setup and scripte", () => {
-    const code = `
-	<template>
-	<div>
-	</div>
-</template>
-`;
+//   it("empty that setup and scripte", () => {
+//     const code = `
+// 	<template>
+// 	<div>
+// 	</div>
+// </template>
+// `;
 
-    const index = 10;
-    const node = getFunctionNodeVue(index, code);
+//     const index = 10;
+//     const node = getFunctionNodeVue(index, code);
 
-    expect(node).toBeFalsy();
-  });
+//     expect(node).toBeFalsy();
+//   });
 });

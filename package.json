@@ -28,8 +28,8 @@
     "keybindings": [
       {
         "command": "add-log.addLog",
-        "key": "ctrl+D L",
-        "mac": "cmd+D L"
+        "key": "ctrl+D ctrl+L",
+        "mac": "cmd+D cmd+L"
       }
     ]
   },

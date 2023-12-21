@@ -4,7 +4,7 @@ export class FunctionExpressionHandler extends BaseNodeHandler {
     return this._isContain(this.path.parentPath.parentPath.node, this.index);
   }
   handle() {
-    console.log("FunctionExpressionHandler",this.path.node);
+    console.log("FunctionExpressionHandler",this.path);
 
     const funcName = this.path.parentPath.node.id.name;
     console.log("funcName",funcName);
@@ -13,14 +13,14 @@ export class FunctionExpressionHandler extends BaseNodeHandler {
 
     if(this.path.node.body.type==='StringLiteral'){
       console.log("isStringLiteral",this.path.node.body.value);
-      return
+      return;
     }else{
       this.path.node.body.body.unshift(temp);
       const text = this._generate(this.path.node);
       return {
         name: funcName,
-        start: { ...this.path.parentPath.parentPath.node.loc.start },
-        end: { ...this.path.parentPath.parentPath.node.loc.end },
+        start: { ...this.path.node.loc.start },
+        end: { ...this.path.node.loc.end },
         text:text
       };
     }
