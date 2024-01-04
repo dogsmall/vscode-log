@@ -12,50 +12,46 @@ export function activate(context: vscode.ExtensionContext) {
             }
             let completionItem = new vscode.CompletionItem('@log-ignore', vscode.CompletionItemKind.Snippet);
             completionItem.insertText = new vscode.SnippetString('log-ignore');
-            completionItem.documentation = new vscode.MarkdownString("自动添加日志忽略此函数");
+            completionItem.documentation = new vscode.MarkdownString("babel自动添加日志将忽略此函数");
 
             return [completionItem];
         }
     }, '@'));
 
 	let disposable = vscode.commands.registerCommand('add-log.addLog', () => {
-
+		// 获取当前编辑器
 		const editor = vscode.window.activeTextEditor;
 
 		if (editor) {
+			// 获取当前文件类型
 			const languageType = vscode.window.activeTextEditor?.document.languageId;
+
 			if (!languageType) {
 				return;
-			  }
+			}
 			// 获取当前光标所在位置
 			let curPos = editor.selection.active;
+			// 获取当前光标所在位置的偏移量
 			let offset = editor.document.offsetAt(curPos);
-			console.log(offset, languageType);
 			// 获取当前文件内容
 			const sourceText = editor.document.getText();
-			// console.log(text);
 
-			// text to ast
+			// sourceText to AST 
+			// 1. 获取当前光标所在的函数节点
+			// 2. 并添加日志
+			// 3. 返回最终的代码和开始结束位置
 			const node  = getFunctionNode(offset, sourceText, languageType);
-			// 获取要添加日志的代码范围和添加了日志的代码
-			console.log(node);
+
+			// 如果没有找到函数节点，直接返回
 			if(!node) {
 				return;
 			}
 			const {start, end, text} = node;
+			// 生成range
 			const range = new vscode.Range(new vscode.Position(start.line-1,start.column), new vscode.Position(end.line-1,end.column));
+			// 替换代码
 			replaceText(range, text);
 		}
-
-
-		// TODO 获取当前光标所在位置
-		// TODO 获取当前光标所在函数的位置
-		// TODO 获取当前光标所在函数的参数
-		// TODO 添加日志
-		// TODO 转换为字符串
-		// TODO 替换当前光标所在函数
-		// TODO 获取当前光标所在文件
-		vscode.window.showInformationMessage('Hello World from add-log!');
 	});
 
 	context.subscriptions.push(disposable);
